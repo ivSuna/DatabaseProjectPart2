@@ -342,16 +342,6 @@ public class userDAO
 					            "adress_zip_code VARCHAR(5),"+ 
 					            "cash_bal DECIMAL(13,2) DEFAULT 0,"+
 					            "PRIMARY KEY (email) "+"); "),
-				        
-					        "drop table if exists Quotes; ",
-					        ("CREATE TABLE if not exists Quotes( " +
-					        	"quote_id INT AUTO_INCREMENT, " +
-					        	"date DATE NOT NULL, " +
-					        	"price DECIMAL(13,2) DEFAULT 0, " + 
-					        	"num_trees VARCHAR(10) NOT NULL, " + 
-					        	"status VARCHAR(8) DEFAULT 'pending', " + 
-					        	"completed BOOLEAN DEFAULT false, " + 
-					        	"PRIMARY KEY (quote_id)" + "); "),
 					        
 					        "drop table if exists Admins; ",
 					        ("CREATE TABLE if not exists Admins( " +
@@ -380,19 +370,6 @@ public class userDAO
         				"('David Smith', 'david1234');")        		
         					};
         
-        String[] TUPLES_QUOTES = {("insert into Quotes(quote_id, date, num_trees, price, status, completed)"+
-    			"values (quote_id, '2023-10-01', '1', '100', 'pending', false),"+
-        				"(quote_id, '2023-10-02', '2', '200', 'pending', false),"+
-        				"(quote_id, '2023-10-03', '3', '300', 'pending', false),"+
-        				"(quote_id, '2023-10-04', '1', '100', 'pending', false),"+
-        				"(quote_id, '2023-10-05', '2', '200', 'pending', false),"+
-        				"(quote_id, '2023-10-06', '3', '300', 'pending', false),"+
-        				"(quote_id, '2023-10-07', '1', '100', 'pending', false),"+
-        				"(quote_id, '2023-10-08', '4', '400', 'pending', false),"+
-        				"(quote_id, '2023-10-09', '5', '500', 'pending', false),"+
-        				"(quote_id, '2023-10-10', '2', '200', 'pending', false);")        		
-        					};
-        
         //for loop to put these in database
         for (int i = 0; i < INITIAL.length; i++)
         	statement.execute(INITIAL[i]);
@@ -402,9 +379,7 @@ public class userDAO
         
         for (int i = 0; i < TUPLES_ADMINS.length; i++)	
         	statement.execute(TUPLES_ADMINS[i]);
-        
-        for (int i = 0; i < TUPLES_QUOTES.length; i++)	
-        	statement.execute(TUPLES_QUOTES[i]);
+     
         
         
         disconnect();

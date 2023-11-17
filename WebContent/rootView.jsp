@@ -17,7 +17,7 @@
 	</form>
 	<a href="login.jsp"target ="_self" > logout</a><br><br> 
 
-<h1>List all users</h1>
+	<h1>List all users</h1>
     <div align="center">
         <table border="1" cellpadding="6">
             <caption><h2>List of Clients</h2></caption>
@@ -31,6 +31,7 @@
                 <th>cash_bal($)</th>
                 
             </tr>
+            
             <c:forEach var="users" items="${listUser}">
                 <tr style="text-align:center">
                     <td><c:out value="${users.email}" /></td>
@@ -46,7 +47,7 @@
        
        
 	</div>
-	</div>
+</div>
 
 </body>
 </html>

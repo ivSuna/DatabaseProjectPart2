@@ -9,13 +9,48 @@
 <title>Activity page</title>
 </head>
 
-<center><h1>Welcome! Quotes Listed Below</h1> </center>
+<center><h1>Welcome!</h1> </center>
 
  
 	<body>
-	 <center>
-	 	 <p> You will be able to create quotes in project part 2!</p>
+	 <div align = "center">
+	 
+	 	 <p> Create a quote Below!</p>
+	 	 <div align="center">
+        <table border="1" cellpadding="6">
+            <caption><h2>Logged In User</h2></caption>
+            <tr>
+                <th>Email</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Address</th>
+                <th>Birthday</th>
+                <th>cash_bal($)</th>
+                
+            </tr>
+            
+            
+            <tr style="text-align:center">
+                 <td><c:out value="${listCurrUserEmail}" /></td>
+                 <td><c:out value="${listCurrUserFirstName}" /></td>
+                 <td><c:out value="${listCurrUserLastName}" /></td>
+                 <td><c:out value= "${listCurrUserAddNum} ${listCurrUserAddSt} ${listCurrUserAddCity} ${listCurrUserAddState} ${listCurrUserZip}" /></td>
+                 <td><c:out value="${listCurrUserBirth}" /></td>
+                 <td><c:out value="${listCurrUserCash}"/></td>
+            </tr>        
+            
+        </table>
+        
+       <br><br><br>
+       <h2>User Quotes</h2>
+	</div>
+		 <a href="createQuote.jsp"target ="_self" > Create Quote</a><br><br>
+		 
+
+
+
 		 <a href="login.jsp"target ="_self" > logout</a><br><br> 
-		 </center>
+
+	 </div>
 	</body>
 </html>

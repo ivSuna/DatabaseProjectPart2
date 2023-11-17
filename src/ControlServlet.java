@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 public class ControlServlet extends HttpServlet {
 	    private static final long serialVersionUID = 1L;
 	    private userDAO userDAO = new userDAO();
+	    private QuoteDAO QuoteDAO = new QuoteDAO();
 	    private String currentUser;
 	    private HttpSession session=null;
 	    
@@ -34,6 +35,7 @@ public class ControlServlet extends HttpServlet {
 	    public void init()
 	    {
 	    	userDAO = new userDAO();
+	    	QuoteDAO = new QuoteDAO();
 	    	currentUser= "";
 	    }
 	    
@@ -55,6 +57,7 @@ public class ControlServlet extends HttpServlet {
         		break;
         	case "/initialize":
         		userDAO.init();
+        		QuoteDAO.init();
         		System.out.println("Database successfully initialized!");
         		rootPage(request,response,"");
         		break;
@@ -66,8 +69,13 @@ public class ControlServlet extends HttpServlet {
         		break;
         	 case "/list": 
                  System.out.println("The action is: list");
-                 listUser(request, response);           	
+                 listUserFunc(request, response); 
+                 listQuoteFunc(request, response);
                  break;
+        	 case "/createQuote":
+        		 createQuote(request, response);
+        		 System.out.println("Quote Sent Awaiting Response");
+        		 break;
 	    	}
 	    }
 	    catch(Exception ex) {
@@ -75,47 +83,94 @@ public class ControlServlet extends HttpServlet {
 	    	}
 	    }
         	
-	    private void listUser(HttpServletRequest request, HttpServletResponse response)
+	    private void listUserFunc(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, IOException, ServletException {
 	        System.out.println("listUser started: 00000000000000000000000000000000000");
 
 	     
-	        List<user> listUser = userDAO.listAllClients();
-	        request.setAttribute("listUser", listUser);       
+	        List<user> listUserVar = userDAO.listAllClients();
+	        request.setAttribute("listUserJSP", listUserVar);       
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("UserList.jsp");       
 	        dispatcher.forward(request, response);
 	     
 	        System.out.println("listPeople finished: 111111111111111111111111111111111111");
 	    }
-	   /*
-	    private void listQuotes(HttpServletRequest request, HttpServletResponse response)
+	   
+	    private void listQuoteFunc(HttpServletRequest request, HttpServletResponse response)
 	            throws SQLException, IOException, ServletException {
 	        System.out.println("listQuote started: 00000000000000000000000000000000000");
 
 	     
-	        List<Quote> listQuotes = userDAO.listAllQuotes();
-	        request.setAttribute("listQuotes", listQuotes);       
+	        List<Quote> listQuoteVar = QuoteDAO.listAllQuotes();
+	        request.setAttribute("listQuotes", listQuoteVar);       
 	        RequestDispatcher dispatcher = request.getRequestDispatcher("QuoteList.jsp");       
 	        dispatcher.forward(request, response);
 	     
-	        System.out.println("listQuotes finished: 111111111111111111111111111111111111");
+	        System.out.println("listQuote finished: 111111111111111111111111111111111111");
 	    }
-	    */
+	    
 	    
 	    private void rootPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("root view");
 			request.setAttribute("listUser", userDAO.listAllClients());
+			request.setAttribute("listQuote", QuoteDAO.listAllQuotes());
 	    	request.getRequestDispatcher("rootView.jsp").forward(request, response);
 	    }
 	    
 	    private void davidPage(HttpServletRequest request, HttpServletResponse response, String view) throws ServletException, IOException, SQLException{
 	    	System.out.println("David Smith View");
 			request.setAttribute("listUser", userDAO.listAllClients());
+			request.setAttribute("listQuote", QuoteDAO.listAllQuotes());
 	    	request.getRequestDispatcher("davidView.jsp").forward(request, response);
+	    }
+	    private void userPage(HttpServletRequest request, HttpServletResponse response, String currUser) throws ServletException, IOException, SQLException{
+	    	System.out.println("User Page");
+	    	user tempCurrUser = userDAO.getUser(currUser);
+	    	request.setAttribute("listCurrUserEmail", tempCurrUser.getEmail());
+	    	request.setAttribute("listCurrUserFirstName", tempCurrUser.getFirstName());
+	    	request.setAttribute("listCurrUserLastName", tempCurrUser.getLastName());
+	    	request.setAttribute("listCurrUserAddNum", tempCurrUser.getAdress_street_num());
+	    	request.setAttribute("listCurrUserAddSt", tempCurrUser.getAdress_street());
+	    	request.setAttribute("listCurrUserAddCity", tempCurrUser.getAdress_city());
+	    	request.setAttribute("listCurrUserAddState", tempCurrUser.getAdress_state());
+	    	request.setAttribute("listCurrUserZip", tempCurrUser.getAdress_zip_code());
+	    	request.setAttribute("listCurrUserBirth", tempCurrUser.getBirthday());
+	    	request.setAttribute("listCurrUserCash", tempCurrUser.getCash_bal());
+	    	
+	    	request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	    }
 	    
 	    
 	    protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	 String email = request.getParameter("email");
+	    	 String password = request.getParameter("password");
+	    	 
+	    	 if (email.equals("root") && password.equals("pass1234")) {
+				 System.out.println("Login Successful! Redirecting to root");
+				 session = request.getSession();
+				 session.setAttribute("username", email);
+				 rootPage(request, response, "");
+	    	 }
+	    	 else if (email.equals("david") && password.equals("pass1234")) {
+				 System.out.println("Login Successful! Redirecting to David Smith");
+				 session = request.getSession();
+				 session.setAttribute("username", email);
+				 davidPage(request, response, "");
+	    	 }
+	    	 else if(userDAO.isValid(email, password)) 
+	    	 {
+			 	 
+			 	 currentUser = email;
+				 System.out.println("Login Successful! Redirecting");
+				 userPage(request,response,currentUser);
+			 			 			 			 
+	    	 }
+	    	 else {
+	    		 request.setAttribute("loginStr","Login Failed: Please check your credentials.");
+	    		 request.getRequestDispatcher("login.jsp").forward(request, response);
+	    	 }
+	    }
+	    protected void currUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	    	 String email = request.getParameter("email");
 	    	 String password = request.getParameter("password");
 	    	 
@@ -176,7 +231,25 @@ public class ControlServlet extends HttpServlet {
 	   		 request.setAttribute("errorTwo","Registration failed: Password and Password Confirmation do not match.");
 	   		 request.getRequestDispatcher("register.jsp").forward(request, response);
 	   	 	}
-	    }    
+	    }
+	    
+	    private void createQuote(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+	    	String firstName = request.getParameter("firstName");
+	   	 	String date = request.getParameter("date");
+	   	 	String num_trees = request.getParameter("num_trees");
+	   	 	
+	   	 	
+	  
+		   	
+		    Quote quote = new Quote(firstName, date, num_trees, 0, "pending", false);
+		   	QuoteDAO.insert(quote);
+		   	logout(request, response);
+		   	System.out.println("Quote Created - Added to database");
+		   	
+	   	 
+	    }
+	    
+	    
 	    private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	    	currentUser = "";
         		response.sendRedirect("login.jsp");

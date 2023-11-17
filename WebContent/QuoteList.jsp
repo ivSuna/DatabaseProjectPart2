@@ -22,14 +22,14 @@
                 
 
             </tr>
-            <c:forEach var="quote" items="${listQuotes}">
+            <c:forEach var="quotes" items="${listQuote}">
                 <tr style="text-align:center">
-                    <td><c:out value="${quote.quote_id}" /></td>
-                    <td><c:out value="${quote.date}" /></td>
-                    <td><c:out value="${quote.num_trees}" /></td>         
-                    <td><c:out value="${quote.price}" /></td>
-                    <td><c:out value="${quote.status}" /></td>
-                    <td><c:out value="${quote.completed}" /></td>
+                    <td><c:out value="${quotes.quote_id}" /></td>
+                    <td><c:out value="${quotes.date}" /></td>
+                    <td><c:out value="${quotes.num_trees}" /></td>         
+                    <td><c:out value="${quotes.price}" /></td>
+                    <td><c:out value="${quotes.status}" /></td>
+                    <td><c:out value="${quotes.completed}" /></td>
           
                     
             </c:forEach>

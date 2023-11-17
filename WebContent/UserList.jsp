@@ -2,9 +2,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
   <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="ISO-8859-1">
     <title>All User list</title>
 </head>
 <body>
@@ -22,15 +24,15 @@
                 
 
             </tr>
-            <c:forEach var="client" items="${listClient}">
+            <c:forEach var="users" items="${listUser}">
                 <tr style="text-align:center">
-                    <td><c:out value="${client.email}" /></td>
-                    <td><c:out value="${client.firstName}" /></td>
-                    <td><c:out value="${client.lastName}" /></td>
-                    <td><c:out value= "${client.adress_street_num} ${users.adress_street} ${users.adress_city} ${users.adress_state} ${users.adress_zip_code}" /></td>
-                    <td><c:out value="${client.password}" /></td>
-                    <td><c:out value="${client.birthday}" /></td>
-                    <td><c:out value="${client.cash_bal}"/></td>
+                    <td><c:out value="${users.email}" /></td>
+                    <td><c:out value="${users.firstName}" /></td>
+                    <td><c:out value="${users.lastName}" /></td>
+                    <td><c:out value= "${users.adress_street_num} ${users.adress_street} ${users.adress_city} ${users.adress_state} ${users.adress_zip_code}" /></td>
+                    <td><c:out value="${users.password}" /></td>
+                    <td><c:out value="${users.birthday}" /></td>
+                    <td><c:out value="${users.cash_bal}"/></td>
                    
                 </tr>
             </c:forEach>
